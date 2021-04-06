@@ -149,7 +149,7 @@ function mwetodoNuevoRegistro () {
 	# try-catch
     echo -e "\ttry {" >> $salida
     echo -e "\t\t\$this->validate([" >> $salida
-    echo -e "\t\t\t'$(varNew $1) => ['required', new Nombre, 'unique:$(quitarId $1)s,nombre']'" >> $salida
+    echo -e "\t\t\t'$(varNew $1)' => ['required', new Nombre, 'unique:$(quitarId $1)s,nombre']," >> $salida
     echo -e "\t\t]);" >> $salida
     echo -e "\t} catch (\\Illuminate\\Validation\\ValidationException \$e) {" >> $salida
     echo -e "\t\t\$error = \$e->validator->errors()->get('$(varNew $1)');" >> $salida
