@@ -100,7 +100,13 @@ function eventoThis () {
 	if [ "$4" == "tab" ]; then
 		tab="\t"
 	fi	
-	echo -e "$tab\$this->emit('$(nombreEvento $1 $2)', '$3');"
+	${place:0:1}
+	if [ ${3:0:1} == "$" ]; then
+		echo -e "$tab\$this->emit('$(nombreEvento $1 $2)', $3);"
+	else
+		echo -e "$tab\$this->emit('$(nombreEvento $1 $2)', '$3');"
+	fi		
+	
 }
 
 # 1 - nombre genérico, 2 - nombre campo, 3 - valor
