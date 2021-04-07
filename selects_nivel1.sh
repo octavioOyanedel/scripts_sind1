@@ -129,11 +129,18 @@ function eventos () {
 	echo -e "}" >> $salida
 }
 
-function metodoRender () {
+function metodoRenderSelect () {
 	comentario "Render select"
 	echo -e "public function render()\n{" >> $salida 
 	echo -e "\t\$this->poblarSelect();" >> $salida
 	echo -e "\treturn view('livewire.socios.forms.select-XXX');" >> $salida
+	echo -e "}" >> $salida
+}
+
+function metodoRenderModal () {
+	comentario "Render select"
+	echo -e "public function render()\n{" >> $salida 
+	echo -e "\treturn view('livewire.socios.forms.modal-XXX');" >> $salida
 	echo -e "}" >> $salida
 }
 
@@ -144,8 +151,15 @@ function metodoPoblarSelect () {
 	echo -e "}" >> $salida
 }
 
+function metodoNuevoModal () {
+	comentario "Emite evento para guardar registro"
+	echo -e "public function new$(nombreCamelCase $(quitarId $1))()\n{" >> $salida 
+	echo -e "\t\$this->emit('$(nombreEvento "New" $1)', \$this->new_$(quitarId $1));" >> $salida
+	echo -e "}" >> $salida
+}
+
 # 1 - campo, 2 - modelo
-function mwetodoNuevoRegistro () {
+function metodoNuevoRegistro () {
 	comentario "Nuevo registro"
 	aux=$(quitarId $1)
 	parametro="$(varNew $1)"
@@ -181,6 +195,85 @@ function metodoResetForm () {
 	echo -e "}" >> $salida
 }
 
+function metodoResetFormModal () {
+	comentario "Reset form de ventana modal"
+	echo -e "public function resetForm()\n{" >> $salida 	
+	varSimpleThis "new_$(quitarId $1)" "\"\"" "tab"
+	echo -e "}" >> $salida
+}
+
+# 1 - campo, 2 - modal 
+function elementoSelect () {
+	echo -e "<div>" >> $salida
+	echo -e "\t<div class=\"position-relative form-group\">" >> $salida
+	echo -e "\t\t<label for=\"$1\" class=\"\">" >> $salida
+	echo -e "\t\t\t<b>$2</b>" >> $salida
+		if [ "$MODAL" == "SI" ]; then
+		echo -e "\t\t\t<a wire:click=\"$(nombreMetodo "resetModal" $1)\" href=\"javascript:void(0)\" style=\"float: right;\" data-toggle=\"modal\" data-target=\"#$(nombreCamelCase $(quitarId $1))Modal\">" >> $salida
+			echo -e "\t\t\t\t<i class=\"mt-1 fas fa-plus-circle text-success\"></i>" >> $salida
+		echo -e "\t\t\t</a>" >> $salida
+		fi	
+	echo -e "\t\t\t<select wire:model=\"$1\" name=\"$1\" id=\"$1\" class=\"form-control form-control-sm\">" >> $salida
+	echo -e "\t\t\t\t<option value=\"\">...</option>" >> $salida
+	echo -e "\t\t\t\t@foreach(\$$(quitarId $1)s as \$$(quitarId $1))" >> $salida
+	echo -e "\t\t\t\t\t<option value=\"{{\$nacion_socio->id}}\">{{\$nacion_socio->nombre}}</option>" >> $salida
+	echo -e "\t\t\t\t@endforeach" >> $salida
+	echo -e "\t\t\t</select>" >> $salida		
+	echo -e "\t\t</label>" >> $salida
+	echo -e "\t</div>" >> $salida
+	echo -e "</div>" >> $salida
+}
+
+# 1 - campo, 2 etiqueta
+function elementoModal () {
+	echo -e "<div>" >> $salida
+	echo -e "\t<div wire:ignore.self class=\"modal fade\" id=\"modal$(nombreCamelCase $(quitarId $1))\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modal$(nombreCamelCase $(quitarId $1))Label\" aria-hidden=\"true\">" >> $salida
+	echo -e "\t\t<div class=\"modal-dialog\" role=\"document\">" >> $salida
+	echo -e "\t\t\t<div class=\"modal-content\">" >> $salida
+	echo -e "\t\t\t\t<div class=\"modal-header\">" >> $salida
+	echo -e "\t\t\t\t\t<h5 class=\"modal-title\" id=\"modal$(nombreCamelCase $(quitarId $1))Label\">Nuev@ $2</h5>" >> $salida
+	echo -e "\t\t\t\t\t<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">" >> $salida
+	echo -e "\t\t\t\t\t\t<span aria-hidden=\"true\">&times;</span>" >> $salida
+	echo -e "\t\t\t\t\t</button>" >> $salida
+	echo -e "\t\t\t\t</div>" >> $salida
+	echo -e "\t\t\t\t<div class=\"modal-body\">" >> $salida
+	echo -e "\t\t\t\t\t<div class=\"position-relative form-group\">" >> $salida
+	echo -e "\t\t\t\t\t\t<label for=\"new_$(quitarId $1)\" class=\"\"><b>Nombre</b></label>" >> $salida
+	echo -e "\t\t\t\t\t\t<input wire:model=\"new_$(quitarId $1)\" name=\"new_$(quitarId $1)\" id=\"new_$(quitarId $1)\" placeholder=\"\" type=\"text\" class=\"form-control form-control-sm @if(Session::has('new_$(quitarId $1)')) is-invalid @enderror mb-1\">" >> $salida
+	echo -e "\t\t\t\t\t\t@if(Session::has('new_$(quitarId $1)'))" >> $salida
+	echo -e "\t\t\t\t\t\t\t<small class=\"text-danger\">{{ Session::get('new_$(quitarId $1)') }}</small>" >> $salida
+	echo -e "\t\t\t\t\t\t@enderror" >> $salida
+	echo -e "\t\t\t\t\t</div>	" >> $salida
+	echo -e "\t\t\t\t</div>" >> $salida
+	echo -e "\t\t\t\t<div class=\"modal-footer\">" >> $salida
+	echo -e "\t\t\t\t\t<button type=\"button\" id=\"cerrarModal$(nombreCamelCase $(quitarId $1))\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Salir</button>" >> $salida
+	echo -e "\t\t\t\t\t<button wire:click=\"new$(nombreCamelCase $(quitarId $1))\" type=\"button\" class=\"btn btn-primary\">Guardar</button>" >> $salida
+	echo -e "\t\t\t\t</div>" >> $salida
+	echo -e "\t\t\t</div>" >> $salida
+	echo -e "\t\t</div>" >> $salida
+	echo -e "\t</div>" >> $salida
+	echo -e "</div>" >> $salida
+}
+
+# 1 - campo
+function cerrarModal () {
+	echo -e "<script type=\"text/javascript\">" >> $salida >> $salida
+	echo -e "\twindow.livewire.on('eCargar$(nombreCamelCase $(quitarId $1))', $(quitarId $1) => {" >> $salida
+	echo -e "\t\t\$('#$1 option[value=\"'+$(quitarId $1).id+'\"]').remove();" >> $salida
+	echo -e "\t\t\t\$(\"#$1\").append('<option value=\"'+$(quitarId $1).id+'\" selected="selected">'+$(quitarId $1).nombre+'</option>');" >> $salida
+	echo -e "\t\t\$(\"#cerrarModal$(nombreCamelCase $(quitarId $1))\").click();" >> $salida
+	echo -e "\t});" >> $salida
+	echo -e "</script>" >> $salida
+}
+
+# 1 - campo
+function metodoErrorValidacion () {
+	comentario "Dispone mensaje (flash) de error en validación de form modal en ventana modal"
+	echo -e "public function $(nombreEvento "ErrorValidacion") ""()\n{" >> $salida 
+	echo -e "\tSession::flash('new_$(quitarId $1)',\$error[0]);" >> $salida
+	echo -e "}" >> $salida	
+}
+
 # Variables
 archivo="listado_elementos.txt"
 nombre="salida.php"
@@ -199,6 +292,7 @@ do
 		# Clase Select
 		comentario "Clase select $CAMPO"
 
+		# Variables
 		varSimple $CAMPO
 		varArreglo $CAMPO
 		varNewVacia $CAMPO
@@ -208,21 +302,48 @@ do
 		arreglo_eventos=($evento) 
 		eventos $arreglo_eventos
 
-		metodoRender
+		metodoRenderSelect
 
 		metodoPoblarSelect $CAMPO $MODELO
 
-		mwetodoNuevoRegistro $CAMPO $MODELO
+		metodoNuevoRegistro $CAMPO $MODELO
 
 		metodoResetForm $CAMPO
 
 		# Select
 		comentario "Select $CAMPO"	
+
+		elementoSelect $CAMPO $ETIQUETA
+
 		if [ "$MODAL" == "SI" ]; then
+
 			# Clase Modal
 			comentario "Clase modal $CAMPO"
+
+			# Variables
+			varNewVacia $CAMPO
+
+			# Eventos: cada elemento separado por espacio
+			evento1=$(nombreEvento "ResetModal" $CAMPO)
+			evento2=$(nombreEvento "ErrorValidacion" "")
+			arreglo_eventos=($evento1 $evento2) 
+			eventos $arreglo_evento
+
+			comentario "Modal $CAMPO"
+
+			metodoRenderModal
+
+			metodoNuevoModal $CAMPO
+
+			metodoErrorValidacion $CAMPO		
+
+			metodoResetFormModal $CAMPO
+
 			# Modal
-			comentario "Modal $CAMPO"		
+			elementoModal $CAMPO $ETIQUETA
+
+			cerrarModal $CAMPO
+
 		fi	
 	fi
 done < $archivo		
