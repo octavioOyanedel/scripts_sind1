@@ -1,58 +1,58 @@
-nombre1 input text NULL NULL NULL NULL NULL NULL NULL 1er#Nombre
-nombre2 input text NULL NULL NULL NULL NULL NULL NULL 2do#Nombre
-apellido1 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Pat.
-apellido2 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Mat.
-rut input text NULL NULL NULL NULL NULL NULL NULL Rut
-genero select NULL NULL NULL NULL NULL NULL NULL NULL Género
-fecha_nac input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Nacimiento
-contacto input text NULL NULL NULL NULL NULL NULL NULL N°#de#Contacto
-correo input email NULL NULL NULL NULL NULL NULL NULL Correo
-direccion input text NULL NULL NULL NULL NULL NULL NULL Dirección
-fecha_sind1 input date NULL NULL NULL NULL NULL NULL NULL Fecha#Ing.#Sind1
-numero input text NULL NULL NULL NULL NULL NULL NULL N°#de#Socio
-anexo input text NULL NULL NULL NULL NULL NULL NULL Anexo
-fecha_pucv input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Ing.#PUCV
-distrito_id select NULL Distrito 3 provincia_id comuna_id NULL SI ['comunas','provincias'] Región
-provincia_id select NULL Provincia 3 comuna_id NULL provincia_id SI ['comunas','distrito'] Provincia
-comuna_id select NULL Comuna 3 NULL NULL NULL SI ['distrito','provincia'] Comuna
-estado_socio_id select NULL EstadoSocio 1 NULL NULL NULL SI NULL Estado
-cargo_id select NULL Cargo 1 NULL NULL NULL SI NULL Cargo
-sede_id select NULL Sede 2 area_id NULL NULL SI ['areas'] Sede
-area_id select NULL Area 2 NULL NULL sede_id SI ['sede'] Área
-nacion_socio_id select NULL NacionSocio 1 NULL NULL NULL SI NULL Nacionalidad
-grado_id select NULL Grado 2 establecimiento_id NULL NULL SI NULL Nivel#Educacional
-establecimiento_id select NULL Establecimiento 2 NULL NULL grado_id SI ['grado'] Establecimiento
-estado_estudio_id select NULL EstadoEstudio 1 NULL NULL NULL SI NULL Estado
-titulo_id select NULL Titulo 1 NULL NULL NULL SI NULL Título
-nombre1 input text NULL NULL NULL NULL NULL NULL NULL 1er#Nombre
-nombre2 input text NULL NULL NULL NULL NULL NULL NULL 2do#Nombre
-apellido1 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Pat.
-apellido2 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Mat.
-rut input text NULL NULL NULL NULL NULL NULL NULL Rut
-fecha_nac input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Nacimiento
-parentesco_id select NULL Parentesco 1 NULL NULL NULL SI NULL Parentesco
-fecha_solicitud input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Solicitud
-numero input text NULL NULL NULL NULL NULL NULL NULL N°#de#Préstamo
-cheque input text NULL NULL NULL NULL NULL NULL NULL Cheque
-monto input text NULL NULL NULL NULL NULL NULL NULL Monto
-fecha_pago input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Pago
-estado_prestamo_id select NULL EstadoPrestamo 1 NULL NULL NULL NULL NULL Estado
-tipo_prestamo_id select NULL TipoPrestamo 1 NULL NULL NULL NULL NULL Tipo
-cuotas select NULL NULL NULL NULL NULL NULL NULL NULL Cuotas
-cuenta_id select NULL Cuenta 1 NULL NULL NULL SI NULL Cuenta
-tasa_id select NULL Tasa 1 NULL NULL NULL SI NULL Interés
-fecha_registro input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Solicitud
-numero input text NULL NULL NULL NULL NULL NULL NULL N°#de#Registro
-cheque input text NULL NULL NULL NULL NULL NULL NULL Cheque
-monto input text NULL NULL NULL NULL NULL NULL NULL Monto
-detalle input text NULL NULL NULL NULL NULL NULL NULL Detalle
-tipo_contable_id select NULL TipoContable 2 concepto_id NULL NULL NULL ['conceptos'] Concepto
-concepto_id select NULL Concepto 2 NULL NULL tipo_contable_id SI ['tipoContable'] Asociado
-asociado_id select NULL Asociado 1 NULL NULL NULL SI NULL Tipo
-nombre1 input text NULL NULL NULL NULL NULL NULL NULL 1er#Nombre
-nombre2 input text NULL NULL NULL NULL NULL NULL NULL 2do#Nombre
-apellido1 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Pat.
-apellido2 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Mat.
-email input email NULL NULL NULL NULL NULL NULL NULL Correo
-password input password NULL NULL NULL NULL NULL NULL NULL Contraseña
-permiso_id select NULL Permiso 1 NULL NULL NULL NULL NULL Permisos
+nombre1 input text NULL NULL NULL NULL NULL NULL NULL 1er#Nombre NULL
+nombre2 input text NULL NULL NULL NULL NULL NULL NULL 2do#Nombre NULL
+apellido1 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Pat. NULL
+apellido2 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Mat. NULL
+rut input text NULL NULL NULL NULL NULL NULL NULL Rut NULL
+genero select NULL NULL NULL NULL NULL NULL NULL NULL Género NULL
+fecha_nac input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Nacimiento NULL
+contacto input text NULL NULL NULL NULL NULL NULL NULL N°#de#Contacto NULL
+correo input email NULL NULL NULL NULL NULL NULL NULL Correo NULL
+direccion input text NULL NULL NULL NULL NULL NULL NULL Dirección NULL
+fecha_sind1 input date NULL NULL NULL NULL NULL NULL NULL Fecha#Ing.#Sind1 NULL
+numero input text NULL NULL NULL NULL NULL NULL NULL N°#de#Socio NULL
+anexo input text NULL NULL NULL NULL NULL NULL NULL Anexo NULL
+fecha_pucv input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Ing.#PUCV NULL
+distrito_id select NULL Distrito 3 provincia_id comuna_id NULL SI ['comunas','provincias'] Región 1
+provincia_id select NULL Provincia 3 comuna_id NULL provincia_id SI ['comunas','distrito'] Provincia 2
+comuna_id select NULL Comuna 3 NULL NULL NULL SI ['distrito','provincia'] Comuna 3
+estado_socio_id select NULL EstadoSocio 1 NULL NULL NULL SI NULL Estado NULL
+cargo_id select NULL Cargo 1 NULL NULL NULL SI NULL Cargo NULL
+sede_id select NULL Sede 2 area_id NULL NULL SI ['areas'] Sede 1
+area_id select NULL Area 2 NULL NULL sede_id SI ['sede'] Área 2
+nacion_socio_id select NULL NacionSocio 1 NULL NULL NULL SI NULL Nacionalidad NULL
+grado_id select NULL Grado 2 establecimiento_id NULL NULL SI ['establecimientos'] Nivel#Educacional 1
+establecimiento_id select NULL Establecimiento 2 NULL NULL grado_id SI ['grado'] Establecimiento 2
+estado_estudio_id select NULL EstadoEstudio 1 NULL NULL NULL SI NULL Estado NULL
+titulo_id select NULL Titulo 1 NULL NULL NULL SI NULL Título NULL
+nombre1 input text NULL NULL NULL NULL NULL NULL NULL 1er#Nombre NULL
+nombre2 input text NULL NULL NULL NULL NULL NULL NULL 2do#Nombre NULL
+apellido1 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Pat. NULL
+apellido2 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Mat. NULL
+rut input text NULL NULL NULL NULL NULL NULL NULL Rut NULL
+fecha_nac input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Nacimiento NULL
+parentesco_id select NULL Parentesco 1 NULL NULL NULL SI NULL Parentesco NULL
+fecha_solicitud input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Solicitud NULL
+numero input text NULL NULL NULL NULL NULL NULL NULL N°#de#Préstamo NULL
+cheque input text NULL NULL NULL NULL NULL NULL NULL Cheque NULL
+monto input text NULL NULL NULL NULL NULL NULL NULL Monto NULL
+fecha_pago input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Pago NULL
+estado_prestamo_id select NULL EstadoPrestamo 1 NULL NULL NULL NULL NULL Estado NULL
+tipo_prestamo_id select NULL TipoPrestamo 1 NULL NULL NULL NULL NULL Tipo NULL
+cuotas select NULL NULL NULL NULL NULL NULL NULL NULL Cuotas NULL
+cuenta_id select NULL Cuenta 1 NULL NULL NULL SI NULL Cuenta NULL
+tasa_id select NULL Tasa 1 NULL NULL NULL SI NULL Interés NULL
+fecha_registro input date NULL NULL NULL NULL NULL NULL NULL Fecha#de#Solicitud NULL
+numero input text NULL NULL NULL NULL NULL NULL NULL N°#de#Registro NULL
+cheque input text NULL NULL NULL NULL NULL NULL NULL Cheque NULL
+monto input text NULL NULL NULL NULL NULL NULL NULL Monto NULL
+detalle input text NULL NULL NULL NULL NULL NULL NULL Detalle NULL
+tipo_contable_id select NULL TipoContable 2 concepto_id NULL NULL NULL ['conceptos'] Concepto 1
+concepto_id select NULL Concepto 2 NULL NULL tipo_contable_id SI ['tipoContable'] Asociado 2
+asociado_id select NULL Asociado 1 NULL NULL NULL SI NULL Tipo NULL
+nombre1 input text NULL NULL NULL NULL NULL NULL NULL 1er#Nombre NULL
+nombre2 input text NULL NULL NULL NULL NULL NULL NULL 2do#Nombre NULL
+apellido1 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Pat. NULL
+apellido2 input text NULL NULL NULL NULL NULL NULL NULL Apellido#Mat. NULL
+email input email NULL NULL NULL NULL NULL NULL NULL Correo NULL
+password input password NULL NULL NULL NULL NULL NULL NULL Contraseña NULL
+permiso_id select NULL Permiso 1 NULL NULL NULL NULL NULL Permisos NULL

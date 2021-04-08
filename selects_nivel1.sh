@@ -147,7 +147,7 @@ function metodoRenderModal () {
 function metodoPoblarSelect () {
 	comentario "Obtener registros para poblar select"
 	echo -e "public function poblarSelect()\n{" >> $salida 
-	echo -e "\t\$this->$(varNew $1) = $2::orderBy('nombre', 'ASC')->get();" >> $salida
+	echo -e "\t\$this->$(quitarId $1)s = $2::orderBy('nombre', 'ASC')->get();" >> $salida
 	echo -e "}" >> $salida
 }
 
@@ -276,16 +276,15 @@ function metodoErrorValidacion () {
 
 # Variables
 archivo="listado_elementos.txt"
-nombre="salida.php"
-fecha=$(date +"%d-%m-%Y-%H-%M-%S")
+nombre="sn1.php"
+fecha=$(date +"%d%m%Y%H%M%S")
 salida="../${fecha}_${nombre}"
 
 echo "<?php" >> $salida
 
 # Loop principal
-while read CAMPO ELEMENTO TIPO MODELO NIVELES SIGUIENTE1 SIGUIENTE2 DEPENDENCIA MODAL RELACIONES ETIQUETA
+while read CAMPO ELEMENTO TIPO MODELO NIVELES SIGUIENTE1 SIGUIENTE2 DEPENDENCIA MODAL RELACIONES ETIQUETA NIVEL
 do
-	
 	if [ "$NIVELES" == 1 ]; then
 		comentario "BLOQUE $CAMPO"
 
@@ -304,7 +303,7 @@ do
 
 		metodoRenderSelect
 
-		metodoPoblarSelect $CAMPO $MODELO
+		metodoPoblarSelect $CAMPO $MODELO $RELACIONES
 
 		metodoNuevoRegistro $CAMPO $MODELO
 
