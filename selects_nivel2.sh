@@ -263,29 +263,35 @@ function metodoResetFormModal () {
 	echo -e "}" >> $salida
 }
 
-# 1 - campo, 2 - modal 
+# 1 - campo, 2 - modal, 3 - nivel
 function elementoSelect () {
 	echo -e "<div>" >> $salida
 	echo -e "\t<div class=\"position-relative form-group\">" >> $salida
 	echo -e "\t\t<label for=\"$1\" class=\"\">" >> $salida
 	echo -e "\t\t\t<b>$2</b>" >> $salida
-		if [ "$MODAL" == "SI" ]; then
-		echo -e "\t\t\t<a wire:click=\"$(nombreMetodo "resetModal" $1)\" href=\"javascript:void(0)\" style=\"float: right;\" data-toggle=\"modal\" data-target=\"#$(nombreCamelCase $(quitarId $1))Modal\">" >> $salida
-			echo -e "\t\t\t\t<i class=\"mt-1 fas fa-plus-circle text-success\"></i>" >> $salida
-		echo -e "\t\t\t</a>" >> $salida
-		fi	
-	echo -e "\t\t\t<select wire:model=\"$1\" name=\"$1\" id=\"$1\" class=\"form-control form-control-sm\">" >> $salida
-	echo -e "\t\t\t\t<option value=\"\">...</option>" >> $salida
-	echo -e "\t\t\t\t@foreach(\$$(quitarId $1)s as \$$(quitarId $1))" >> $salida
-	echo -e "\t\t\t\t\t<option value=\"{{\$nacion_socio->id}}\">{{\$nacion_socio->nombre}}</option>" >> $salida
-	echo -e "\t\t\t\t@endforeach" >> $salida
-	echo -e "\t\t\t</select>" >> $salida		
 	echo -e "\t\t</label>" >> $salida
+	if [ "$3" == "2" ]; then
+		echo -e "\t\t@if(\$enlace_nuevo)" >> $salida
+	fi
+		if [ "$MODAL" == "SI" ]; then
+		echo -e "\t\t<a wire:click=\"$(nombreMetodo "resetModal" $1)\" href=\"javascript:void(0)\" style=\"float: right;\" data-toggle=\"modal\" data-target=\"#$(nombreCamelCase $(quitarId $1))Modal\">" >> $salida
+			echo -e "\t\t\t<i class=\"mt-1 fas fa-plus-circle text-success\"></i>" >> $salida
+		echo -e "\t\t</a>" >> $salida
+		fi
+	if [ "$3" == "2" ]; then
+		echo -e "\t\t@endif" >> $salida
+	fi
+	echo -e "\t\t<select wire:model=\"$1\" name=\"$1\" id=\"$1\" class=\"form-control form-control-sm\">" >> $salida
+	echo -e "\t\t\t<option value=\"\">...</option>" >> $salida
+	echo -e "\t\t\t@foreach(\$$(quitarId $1)s as \$$(quitarId $1))" >> $salida
+	echo -e "\t\t\t\t<option value=\"{{\$$(quitarId $1)->id}}\">{{\$$(quitarId $1)->nombre}}</option>" >> $salida
+	echo -e "\t\t\t@endforeach" >> $salida
+	echo -e "\t\t</select>" >> $salida		
 	echo -e "\t</div>" >> $salida
 	echo -e "</div>" >> $salida
 }
 
-# 1 - campo, 2 etiqueta
+# 1 - campo, 2 - etiqueta, 3 - nivel
 function elementoModal () {
 	echo -e "<div>" >> $salida
 	echo -e "\t<div wire:ignore.self class=\"modal fade\" id=\"modal$(nombreCamelCase $(quitarId $1))\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"modal$(nombreCamelCase $(quitarId $1))Label\" aria-hidden=\"true\">" >> $salida
@@ -299,6 +305,11 @@ function elementoModal () {
 	echo -e "\t\t\t\t</div>" >> $salida
 	echo -e "\t\t\t\t<div class=\"modal-body\">" >> $salida
 	echo -e "\t\t\t\t\t<div class=\"position-relative form-group\">" >> $salida
+	if [ "$3" == "2" ]; then
+		echo -e "\t\t\t\t\t\t<div class=\"alert alert-info\" role=\"alert\">" >> $salida
+		echo -e "\t\t\t\t\t\t\tAgregar XXX a <b>{{\$nombre_sede}}</b>." >> $salida
+		echo -e "\t\t\t\t\t\t</div>" >> $salida
+	fi
 	echo -e "\t\t\t\t\t\t<label for=\"new_$(quitarId $1)\" class=\"\"><b>Nombre</b></label>" >> $salida
 	echo -e "\t\t\t\t\t\t<input wire:model=\"new_$(quitarId $1)\" name=\"new_$(quitarId $1)\" id=\"new_$(quitarId $1)\" placeholder=\"\" type=\"text\" class=\"form-control form-control-sm @if(Session::has('new_$(quitarId $1)')) is-invalid @enderror mb-1\">" >> $salida
 	echo -e "\t\t\t\t\t\t@if(Session::has('new_$(quitarId $1)'))" >> $salida
@@ -400,6 +411,13 @@ function metodoDesactivarEnlace () {
 	echo -e "}" >> $salida	
 }
 
+function metodoObtenerNombre () {
+	comentario "Obtener nombre de registro"
+	echo -e "public function obtenerNombre(\$$(quitarId $1))\n{" >> $salida
+	echo -e "\t\$this->nombre_$(quitarId $1) = $(nombreCamelCase $(quitarId $1))::findOrFail(\$$(quitarId $1))->nombre;" >> $salida 
+	echo -e "}" >> $salida		
+}
+
 # Variables
 archivo="listado_elementos.txt"
 nombre="sn2.php"
@@ -439,6 +457,42 @@ do
 		metodoObtenerRegistro $CAMPO $MODELO
 
 		metodoResetForm $CAMPO $NIVEL $DEPENDENCIA
+
+		# Select
+		comentario "Select $CAMPO"	
+
+		elementoSelect $CAMPO $ETIQUETA $NIVEL
+
+		if [ "$MODAL" == "SI" ]; then
+
+			# Clase Modal
+			comentario "Clase modal $CAMPO"
+
+			# Variables
+			varNewVacia $CAMPO
+
+			# Eventos: cada elemento separado por espacio
+			evento1=$(nombreEvento "ResetModal" $CAMPO)
+			evento2=$(nombreEvento "ErrorValidacion" "")
+			arreglo_eventos=($evento1 $evento2) 
+			eventos $arreglo_evento
+
+			metodoRenderModal
+
+			metodoNuevoModal $CAMPO
+
+			metodoErrorValidacion $CAMPO		
+
+			metodoResetFormModal $CAMPO
+
+			# Modal
+			comentario "Modal $CAMPO"
+
+			elementoModal $CAMPO $ETIQUETA $NIVEL
+
+			cerrarModal $CAMPO
+			
+		fi			
 	fi
 
 	# select nivel 2
@@ -485,5 +539,46 @@ do
 		metodoDesactivarEnlace
 
 		metodoResetForm $CAMPO $NIVEL $DEPENDENCIA
+
+		# Select
+		comentario "Select $CAMPO"	
+
+		elementoSelect $CAMPO $ETIQUETA	$NIVEL		
+
+		if [ "$MODAL" == "SI" ]; then
+
+			# Clase Modal
+			comentario "Clase modal $CAMPO"
+
+			# Variables
+			varNewVacia $CAMPO
+			varCustom "nombre_$(quitarId $CAMPO)" "\"\""
+
+			# Eventos: cada elemento separado por espacio
+			evento1=$(nombreEvento "ResetModal" $CAMPO)
+			evento2=$(nombreEvento "ErrorValidacion" "")
+			evento3=$(nombreEvento "NombreModal" $CAMPO)
+			arreglo_eventos=($evento1 $evento2 $evento3) 
+			eventos $arreglo_evento
+
+			metodoRenderModal
+
+			metodoNuevoModal $CAMPO
+
+			metodoErrorValidacion $CAMPO		
+
+			metodoResetFormModal $CAMPO
+
+			# Modal
+			comentario "Modal $CAMPO"
+			
+			elementoModal $CAMPO $ETIQUETA $NIVEL
+
+			cerrarModal $CAMPO
+
+			metodoObtenerNombre $CAMPO
+			
+		fi		
+
 	fi	
 done < $archivo		

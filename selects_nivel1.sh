@@ -208,6 +208,7 @@ function elementoSelect () {
 	echo -e "\t<div class=\"position-relative form-group\">" >> $salida
 	echo -e "\t\t<label for=\"$1\" class=\"\">" >> $salida
 	echo -e "\t\t\t<b>$2</b>" >> $salida
+	echo -e "\t\t</label>" >> $salida
 		if [ "$MODAL" == "SI" ]; then
 		echo -e "\t\t\t<a wire:click=\"$(nombreMetodo "resetModal" $1)\" href=\"javascript:void(0)\" style=\"float: right;\" data-toggle=\"modal\" data-target=\"#$(nombreCamelCase $(quitarId $1))Modal\">" >> $salida
 			echo -e "\t\t\t\t<i class=\"mt-1 fas fa-plus-circle text-success\"></i>" >> $salida
@@ -216,10 +217,9 @@ function elementoSelect () {
 	echo -e "\t\t\t<select wire:model=\"$1\" name=\"$1\" id=\"$1\" class=\"form-control form-control-sm\">" >> $salida
 	echo -e "\t\t\t\t<option value=\"\">...</option>" >> $salida
 	echo -e "\t\t\t\t@foreach(\$$(quitarId $1)s as \$$(quitarId $1))" >> $salida
-	echo -e "\t\t\t\t\t<option value=\"{{\$nacion_socio->id}}\">{{\$nacion_socio->nombre}}</option>" >> $salida
+	echo -e "\t\t\t\t\t<option value=\"{{\$$(quitarId $1)->id}}\">{{\$$(quitarId $1)->nombre}}</option>" >> $salida
 	echo -e "\t\t\t\t@endforeach" >> $salida
 	echo -e "\t\t\t</select>" >> $salida		
-	echo -e "\t\t</label>" >> $salida
 	echo -e "\t</div>" >> $salida
 	echo -e "</div>" >> $salida
 }
@@ -328,8 +328,6 @@ do
 			arreglo_eventos=($evento1 $evento2) 
 			eventos $arreglo_evento
 
-			comentario "Modal $CAMPO"
-
 			metodoRenderModal
 
 			metodoNuevoModal $CAMPO
@@ -339,6 +337,8 @@ do
 			metodoResetFormModal $CAMPO
 
 			# Modal
+			comentario "Modal $CAMPO"
+			
 			elementoModal $CAMPO $ETIQUETA
 
 			cerrarModal $CAMPO
